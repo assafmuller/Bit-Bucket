@@ -8,7 +8,7 @@ using namespace std;
 void BitBucket::init()
 {
 	errorKey = "__BitBucketError";
-	bucket[errorKey] = boost::blank();
+	(*this)[errorKey] = boost::blank();
 }
 
 BitBucket::BitBucket()
@@ -21,13 +21,15 @@ BitBucket::BitBucket (std::string filePath)
 	init();
 
 	ifstream file (filePath);
-	if(!file.is_open()) {
+	if(!file.is_open()) 
+	{
 		cout << "Error, cannot open file " << filePath << endl;
 		return;
 	}
 
 	string line;
-	while(!file.eof()) {
+	while(!file.eof()) 
+	{
 		getline (file, line);
 		
 		/*
@@ -48,25 +50,20 @@ BitBucket::BitBucket (std::string filePath)
 		line = line.substr(spaceIndex + 1);
 		string value = line;
 
-		bucket[key] = Bit(type, value);
+		(*this)[key] = Bit(type, value);
 	}
 
 	file.close();
 }
 
-Bit& BitBucket::operator [] (std::string key)
-{
-	return bucket[key];
-}
-
 bool BitBucket::isSet(std::string key)
 {
-	return (bucket.find(key) != bucket.end());
+	return find(key) != end();
 }
 
 void BitBucket::print()
 {
-	for(auto i = bucket.begin(); i != bucket.end(); ++i)
+	for(auto i = begin(); i != end(); ++i)
 	{
 		if(i->first == errorKey)
 			continue;

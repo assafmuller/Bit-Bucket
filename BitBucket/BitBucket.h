@@ -8,9 +8,8 @@
 
 using namespace std;
 
-class BitBucket {
+class BitBucket : public unordered_map<string, Bit> {
 private:
-	unordered_map<string, Bit> bucket;
 	std::string errorKey;
 	void init();
 
@@ -18,7 +17,7 @@ public:
 	BitBucket();
 	BitBucket (std::string filePath);
 
-	Bit& operator [] (std::string key);
+	//Bit& operator [] (std::string key);
 	bool isSet(std::string key);
 
 	void print();

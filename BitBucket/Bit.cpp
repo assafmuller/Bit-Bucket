@@ -129,9 +129,9 @@ std::string Bit::type()
 }
 
 #define OUT(X) 	if(bit.bit.type() == typeid(X)) \
-	{ \
-		out << boost::get<X>(bit.bit); \
-	}
+{ \
+	out << boost::get<X>(bit.bit); \
+}
 
 std::ostream& operator<<(std::ostream &out, const Bit &bit)
 {
