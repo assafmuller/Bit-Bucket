@@ -1,17 +1,16 @@
-#include "Bit.h"
-#include "BitTypeVisitor.h"
 #include <iostream>
 #include <boost/lexical_cast.hpp>
 #include <string>
 
-using namespace std;
+#include "Bit.h"
+#include "BitTypeVisitor.h"
 
 Bit::Bit()
 {
 	this->bit = boost::blank();
 }
 
-Bit::Bit(boost::variant<boost::blank, bool, char, int, float, string> bit)
+Bit::Bit(boost::variant<boost::blank, bool, char, int, float, std::string> bit)
 {
 	this->bit = bit;
 }
@@ -32,12 +31,12 @@ if(type == TYPE_STRING) \
 	catch (boost::bad_lexical_cast e) \
 	{ \
 		bit = TYPE(); \
-		cout << "Invalid type/value combination " << type << " " << value << endl; \
+		std::cout << "Invalid type/value combination " << type << " " << value << std::endl; \
 		return; \
 	} \
 }
 
-Bit::Bit(string type, string value)
+Bit::Bit(std::string type, std::string value)
 {
 	if(type == "bool")
 	{
@@ -55,14 +54,14 @@ Bit::Bit(string type, string value)
 
 		// The type written is bool, but the value is invalid
 		bit = bool();
-		cout << "Invalid type/value combination " << type << " " << value << endl;
+		std::cout << "Invalid type/value combination " << type << " " << value << std::endl;
 		return;
 	}
 
 	INIT_BIT("char", char, value)
 	INIT_BIT("int", int, value)
 	INIT_BIT("float", float, value)
-	INIT_BIT("string", string, value)
+	INIT_BIT("string", std::string, value)
 
 	if(type == "auto")
 	{
@@ -118,7 +117,7 @@ Bit::Bit(string type, string value)
 	else
 	{
 		bit = boost::blank();
-		cout << "Invalid type/value combination " << type << " " << value << endl;
+		std::cout << "Invalid type/value combination " << type << " " << value << std::endl;
 		return;
 	}
 }

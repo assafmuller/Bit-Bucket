@@ -2,21 +2,18 @@
 #define BIT_H
 
 #include <string>
-#include "boost/variant.hpp"
-#include "boost/blank.hpp"
-
-using namespace std;
+#include <boost/variant.hpp>
+#include <boost/blank.hpp>
 
 class Bit {
 private:
-	boost::variant<boost::blank, bool, char, int, float, string> bit;
+	boost::variant<boost::blank, bool, char, int, float, std::string> bit;
 	
 public:
-
 	Bit();
-	Bit(boost::variant<boost::blank, bool, char, int, float, string> bit);
+	Bit(boost::variant<boost::blank, bool, char, int, float, std::string> bit);
 	Bit(const char *text);
-	Bit(string type, string value);
+	Bit(std::string type, std::string value);
 
 	std::string type();
 

@@ -1,33 +1,24 @@
-#include "BitBucket.h"
 #include <fstream>
 #include <iostream>
 #include <boost/lexical_cast.hpp>
 
-using namespace std;
-
-void BitBucket::init()
-{
-	errorKey = "__BitBucketError";
-	(*this)[errorKey] = boost::blank();
-}
+#include "BitBucket.h"
 
 BitBucket::BitBucket()
 {
-	init();
+
 }
 
 BitBucket::BitBucket (std::string filePath)
 {
-	init();
-
-	ifstream file (filePath);
+	std::ifstream file (filePath);
 	if(!file.is_open()) 
 	{
-		cout << "Error, cannot open file " << filePath << endl;
+		std::cout << "Error, cannot open file " << filePath << std::endl;
 		return;
 	}
 
-	string line;
+	std::string line;
 	while(!file.eof()) 
 	{
 		getline (file, line);
@@ -39,16 +30,16 @@ BitBucket::BitBucket (std::string filePath)
 		  
 		// Find first space, everything up to that is the type
 		int spaceIndex = line.find_first_of(' ');
-		string type = line.substr(0, spaceIndex);
+		std::string type = line.substr(0, spaceIndex);
 
 		// Cut what we already found from the string, continue with "name value". Everything up to the first space is the name
 		line = line.substr(spaceIndex + 1);
 		spaceIndex = line.find_first_of(' ');
-		string key = line.substr(0, spaceIndex);
+		std::string key = line.substr(0, spaceIndex);
 
 		// Cut everything before the value, and use that
 		line = line.substr(spaceIndex + 1);
-		string value = line;
+		std::string value = line;
 
 		(*this)[key] = Bit(type, value);
 	}
@@ -63,11 +54,25 @@ bool BitBucket::isSet(std::string key)
 
 void BitBucket::print()
 {
+	print([this] (std::string key, Bit value) 
+	{
+		return true;
+	});
+}
+
+void BitBucket::printBlank()
+{
+	print([this] (std::string key, Bit value) 
+	{
+		return value.type() == "blank";
+	});
+}
+
+void BitBucket::print(std::function <bool (std::string key, Bit value)> predicate)
+{
 	for(auto i = begin(); i != end(); ++i)
 	{
-		if(i->first == errorKey)
-			continue;
-
-		cout << i->second.type() << " " << i->first << " " << i->second << endl;
+		if(predicate(i->first, i->second))
+			std::cout << i->second.type() << " " << i->first << " " << i->second << std::endl;
 	}
 }

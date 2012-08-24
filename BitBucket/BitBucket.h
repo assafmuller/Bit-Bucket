@@ -3,24 +3,22 @@
 
 #include <unordered_map>
 #include <string>
+#include <functional>
 
 #include "Bit.h"
 
-using namespace std;
-
-class BitBucket : public unordered_map<string, Bit> {
+class BitBucket : public std::unordered_map<std::string, Bit> {
 private:
-	std::string errorKey;
-	void init();
 
 public:
 	BitBucket();
 	BitBucket (std::string filePath);
 
-	//Bit& operator [] (std::string key);
 	bool isSet(std::string key);
 
+	void printBlank();
 	void print();
+	void print(std::function <bool (std::string key, Bit value)> predicate);
 };
 
 #endif

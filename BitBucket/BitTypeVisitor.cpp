@@ -25,7 +25,7 @@ std::string BitTypeVisitor::operator() (const float &type) const
 	return "float";
 }
 
-std::string BitTypeVisitor::operator() (const string &type) const
+std::string BitTypeVisitor::operator() (const std::string &type) const
 {
 	return "string";
 }
