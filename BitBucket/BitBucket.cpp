@@ -26,6 +26,8 @@ BitBucket::BitBucket (std::string filePath)
 		/*
 		 *	Format is:
 		 *	type name value
+		 *	type name value
+		 *	...
 		 */
 		  
 		// Find first space, everything up to that is the type
@@ -49,7 +51,7 @@ BitBucket::BitBucket (std::string filePath)
 
 bool BitBucket::isSet(std::string key)
 {
-	return find(key) != end();
+	return count(key);
 }
 
 void BitBucket::print()

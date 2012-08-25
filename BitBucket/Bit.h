@@ -5,6 +5,8 @@
 #include <boost/variant.hpp>
 #include <boost/blank.hpp>
 
+#include "StackPrinter.h"
+
 class Bit {
 private:
 	boost::variant<boost::blank, bool, char, int, float, std::string> bit;
@@ -34,7 +36,9 @@ public:
 		}
 		catch(boost::bad_get)
 		{
-			return T();
+			static StackPrinter sp;
+			sp.print();
+			return T(); // Return a default initialized type. int() gives 0, bool() gives false, etc.
 		}	
 	}
 
