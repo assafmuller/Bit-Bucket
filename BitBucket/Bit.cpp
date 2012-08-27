@@ -37,8 +37,8 @@ Bit::Bit(std::string type, std::string value)
 		}
 
 		// The type written is bool, but the value is invalid
-		variant = bool();
-		std::cout << "Invalid type/value combination " << type << " " << value << std::endl;
+		variant = boost::blank();
+		std::cout << "Invalid type/value combination or bad data " << type << " " << value << std::endl;
 		return;
 	}
 
@@ -79,7 +79,7 @@ Bit::Bit(std::string type, std::string value)
 			variant = boost::lexical_cast<int> (value);
 			return;
 		}
-		catch (boost::bad_lexical_cast e)
+		catch (boost::bad_lexical_cast &e)
 		{
 			// FLOAT
 			try
@@ -87,7 +87,7 @@ Bit::Bit(std::string type, std::string value)
 				variant = boost::lexical_cast<float> (value);
 				return;
 			}
-			catch (boost::bad_lexical_cast e)
+			catch (boost::bad_lexical_cast &e)
 			{
 				// CHAR
 				try
@@ -95,7 +95,7 @@ Bit::Bit(std::string type, std::string value)
 					variant = boost::lexical_cast<char> (value);
 					return;
 				}
-				catch (boost::bad_lexical_cast e)
+				catch (boost::bad_lexical_cast &e)
 				{
 					// STRING
 					variant = value;
@@ -105,11 +105,11 @@ Bit::Bit(std::string type, std::string value)
 		}
 	}
 
-	// If the type is not a known POD or auto
+	// If the type is not a known POD or auto, or the type is known but the data is invalid
 	else
 	{
 		variant = boost::blank();
-		std::cout << "Invalid type " << type << " " << value << std::endl;
+		std::cout << "Invalid type/value combination or bad data " << type << " " << value << std::endl;
 		return;
 	}
 }

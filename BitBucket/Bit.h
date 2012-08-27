@@ -13,6 +13,7 @@ class Bit {
 private:
 	Variant variant;
 
+	// Private init function used by the public constructor that accepts string type, string value
 	template <class T>
 	Variant init(std::string requestedType, std::string typeText, T type, std::string value)
 	{
