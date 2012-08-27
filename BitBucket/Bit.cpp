@@ -7,33 +7,17 @@
 
 Bit::Bit()
 {
-	this->bit = boost::blank();
+	this->variant = boost::blank();
 }
 
-Bit::Bit(boost::variant<boost::blank, bool, char, int, float, std::string> bit)
+Bit::Bit(Variant variant)
 {
-	this->bit = bit;
+	this->variant = variant;
 }
 
 Bit::Bit(const char *text)
 {
-	this->bit = std::string(text);
-}
-
-#define INIT_BIT(TYPE_STRING, TYPE, VALUE) \
-if(type == TYPE_STRING) \
-{ \
-	try \
-	{ \
-		bit = boost::lexical_cast<TYPE> (VALUE); \
-		return; \
-	} \
-	catch (boost::bad_lexical_cast e) \
-	{ \
-		bit = TYPE(); \
-		std::cout << "Invalid type/value combination " << type << " " << value << std::endl; \
-		return; \
-	} \
+	this->variant = std::string(text);
 }
 
 Bit::Bit(std::string type, std::string value)
@@ -42,47 +26,57 @@ Bit::Bit(std::string type, std::string value)
 	{
 		if(value == "false")
 		{
-			bit = false;
+			variant = false;
 			return;
 		}
 
 		if(value == "true")
 		{
-			bit = true;
+			variant = true;
 			return;
 		}
 
 		// The type written is bool, but the value is invalid
-		bit = bool();
+		variant = bool();
 		std::cout << "Invalid type/value combination " << type << " " << value << std::endl;
 		return;
 	}
 
-	INIT_BIT("char", char, value)
-	INIT_BIT("int", int, value)
-	INIT_BIT("float", float, value)
-	INIT_BIT("string", std::string, value)
+	variant = init(type, "char", char(), value);
+	if(variant.type() != typeid(boost::blank))
+		return;
+
+	variant = init(type, "int", int(), value);
+	if(variant.type() != typeid(boost::blank))
+		return;
+
+	variant = init(type, "float", float(), value);
+	if(variant.type() != typeid(boost::blank))
+		return;
+
+	variant = init(type, "string", std::string(), value);
+	if(variant.type() != typeid(boost::blank))
+		return;
 
 	if(type == "auto")
 	{
 		// BOOL
 		if(value == "true")
 		{
-			bit = true;
+			variant = true;
 			return;
 		}
 
 		if(value == "false")
 		{
-			bit = false;
+			variant = false;
 			return;
 		}
 
 		// INT
 		try
 		{
-			int test = boost::lexical_cast<int> (value);
-			bit = test;
+			variant = boost::lexical_cast<int> (value);
 			return;
 		}
 		catch (boost::bad_lexical_cast e)
@@ -90,8 +84,7 @@ Bit::Bit(std::string type, std::string value)
 			// FLOAT
 			try
 			{
-				float test = boost::lexical_cast<float> (value);
-				bit = test;
+				variant = boost::lexical_cast<float> (value);
 				return;
 			}
 			catch (boost::bad_lexical_cast e)
@@ -99,14 +92,13 @@ Bit::Bit(std::string type, std::string value)
 				// CHAR
 				try
 				{
-					char test = boost::lexical_cast<char> (value);
-					bit = test;
+					variant = boost::lexical_cast<char> (value);
 					return;
 				}
 				catch (boost::bad_lexical_cast e)
 				{
 					// STRING
-					bit = value;
+					variant = value;
 					return;
 				}
 			}
@@ -116,35 +108,26 @@ Bit::Bit(std::string type, std::string value)
 	// If the type is not a known POD or auto
 	else
 	{
-		bit = boost::blank();
-		std::cout << "Invalid type/value combination " << type << " " << value << std::endl;
+		variant = boost::blank();
+		std::cout << "Invalid type " << type << " " << value << std::endl;
 		return;
 	}
 }
 
 std::string Bit::type()
 {
-	return boost::apply_visitor(BitTypeVisitor(), bit);
-}
-
-#define OUT(X) 	if(bit.bit.type() == typeid(X)) \
-{ \
-	out << boost::get<X>(bit.bit); \
+	return boost::apply_visitor(BitTypeVisitor(), variant);
 }
 
 std::ostream& operator<<(std::ostream &out, const Bit &bit)
 {
-	OUT(int)
-	OUT(float)
-	OUT(bool)
-	OUT(char)
-	OUT(std::string)
+	out << bit.variant;
 
 	return out;
 }
 
 Bit Bit::operator= (const Bit &other)
 {
-	bit = other.bit;
+	variant = other.variant;
 	return *this;
 }
