@@ -12,13 +12,15 @@ private:
 
 public:
 	BitBucket();
-	BitBucket (std::string filePath);
+	BitBucket (std::string filePath); // Initialize the Bit Bucket from a text file
+
+	void serialize(std::string filePath); // Write the bit bucket to a text file
 
 	bool isSet(std::string key);
 
 	void printBlank();
 	void print();
-	void print(std::function <bool (std::string key, Bit value)> predicate);
+	void print(std::function <bool (std::string key, Bit value)> predicate, std::ostream &out = std::cout);
 };
 
 #endif

@@ -56,7 +56,7 @@ bool BitBucket::isSet(std::string key)
 
 void BitBucket::print()
 {
-	print([this] (std::string key, Bit value) 
+	print([] (std::string key, Bit value) 
 	{
 		return true;
 	});
@@ -64,17 +64,34 @@ void BitBucket::print()
 
 void BitBucket::printBlank()
 {
-	print([this] (std::string key, Bit value) 
+	print([] (std::string key, Bit value) 
 	{
 		return value.type() == "blank";
 	});
 }
 
-void BitBucket::print(std::function <bool (std::string key, Bit value)> predicate)
+void BitBucket::print(std::function <bool (std::string key, Bit value)> predicate, std::ostream &out)
 {
 	for(auto i = begin(); i != end(); ++i)
 	{
 		if(predicate(i->first, i->second))
-			std::cout << i->second.type() << " " << i->first << " " << i->second << std::endl;
+			out << i->second.type() << " " << i->first << " " << i->second << std::endl;
 	}
+}
+
+void BitBucket::serialize(std::string filePath)
+{
+	std::ofstream file (filePath);
+	if(!file.is_open()) 
+	{
+		std::cout << "Error, cannot open file " << filePath << " for writing." << std::endl;
+		return;
+	}
+
+	print([] (std::string key, Bit value) 
+	{
+		return true;
+	}, file);
+
+	file.close();
 }
