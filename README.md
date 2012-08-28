@@ -57,8 +57,8 @@ Two types of errors may commonly occur when working with a Bit Bucket:
 
 2. Accessing the variant with a wrong type / An incorrect type cast:
 
-	bucket["string"] = "Jerusalem";
-	int x = bucket["string"]; // Can only convert strings representing numbers, not words
+        bucket["string"] = "Jerusalem";
+        int x = bucket["string"]; // Can only convert strings representing numbers, not words
 
 
 What do we do in these cases?
