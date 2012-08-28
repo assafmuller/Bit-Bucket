@@ -51,7 +51,7 @@ BitBucket::BitBucket (std::string filePath)
 
 bool BitBucket::isSet(std::string key)
 {
-	return count(key);
+	return (count(key) > 0);
 }
 
 void BitBucket::print()

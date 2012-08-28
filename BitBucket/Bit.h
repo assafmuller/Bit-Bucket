@@ -4,6 +4,7 @@
 #include <string>
 #include <boost/variant.hpp>
 #include <boost/blank.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include "StackPrinter.h"
 
@@ -52,21 +53,80 @@ public:
 	template <class T>
 	operator T() 
 	{
-		try
+		switch(variant.which())
 		{
-			return boost::get<T>(variant);
+			// bool
+			case 1:
+				return boost::get<bool>(variant);
+			break;
+
+			// char
+			case 2:
+				return boost::get<char>(variant);
+			break;
+
+			// int
+			case 3:
+				return boost::get<int>(variant);
+			break;
+
+			// float
+			case 4:
+				return boost::get<float>(variant);
+			break;
+
+			// string
+			case 5:
+				try
+				{
+					return boost::lexical_cast<T>(variant);
+				}
+				catch(boost::bad_lexical_cast e)
+				{
+					std::cout << "Failed to convert Bit " << boost::get<std::string>(variant) << " from a string to another type" << std::endl;
+					StackPrinter sp;
+					sp.print();
+					return T();
+				}	
+			break;
+
+			case 0:
+			default:
+				StackPrinter sp;
+				sp.print();
+				return T();
+			break;
 		}
-		catch(boost::bad_get)
+	}
+
+	// Conversion to strings needs specialized behavior
+	operator std::string()
+	{
+		// If the requested conversion is a string, and the variant is actually a string - Just do it
+		if(variant.type() == typeid(std::string))
+			return boost::get<std::string>(variant);
+		else
 		{
-			static StackPrinter sp; // Print the stack trace
-			sp.print();
-			return T(); // Return a default initialized type. int() gives 0, bool() gives false, etc.
-		}	
+			// If the variant is not a string, try to convert it to one
+			try
+			{
+				return boost::lexical_cast<std::string>(variant);
+			}
+			// Hard to think of a case where you cannot convert a bool/char/int/float to a string, but if the conversion failed, return an empty string
+			catch(boost::bad_lexical_cast e)
+			{
+				StackPrinter sp;
+				sp.print();
+				return "";
+			}	
+		}
 	}
 
 	Bit operator= (const Bit &other);
 };
 
 std::ostream& operator << (std::ostream &out, const Bit &bit);
+
+typedef Bit var;
 
 #endif
