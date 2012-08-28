@@ -1,4 +1,5 @@
 **Introduction:**
+
 Bit Bucket is a C++ heterogeneous container / hash map, where each cell holds one of the following intrinsic types: bool, char, int, float and std::string. The type of the variant can change during runtime.
 
 Here's a few examples to explain the idea:
@@ -25,6 +26,7 @@ Output: "Soundgarden rock!".
 	bool flag = bucket["nonExistant"]; // bool will be equal to false, and the stack trace will be printed
 
 **The classes:**
+
 _BitBucket_ is a class that inherits from std::unordered_map, and adds the following functionality:
 
 1. Construction from a text file. The file must be of the following format:
@@ -49,6 +51,7 @@ _Bit_ is what the BitBucket holds. This class is essentially a wrapper for boost
 
 
 **Error handling:**
+
 Two types of errors may commonly occur when working with a Bit Bucket:
 
 1. Access to an invalid cell. For example:
@@ -72,7 +75,9 @@ In the first case, the cell "nonExistant" will be created and its type will be b
 3. You may use BitBucket::isSet(string key) to see if a cell exists before accessing it.
 
 **Requirements:**
+
 Bit Bucket uses Boost as well as several C++11 features. VS2010 compiles Bit Bucket just fine, as well as VS2012, and the latest GCC and Clang.
 
 **Credits and licensing:**
+
 Bit Bucket (c) 2012 was written by Assaf Muller. The code is under the MIT license, which means you can use it for closed, open source, free and commercial products. It is currently hosted at: https://github.com/assafmuller/Bit-Bucket. Feel free to fork and pull request!
