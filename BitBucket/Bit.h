@@ -10,11 +10,23 @@
 
 typedef boost::variant<boost::blank, bool, char, int, float, std::string> Variant;
 
+/**
+	The Bit class is a variant, able to hold bool, char, int, float or string at any given time.
+*/
 class Bit {
 private:
-	Variant variant;
+	Variant variant; /// boost::variant, where we actually hold the variant's data
 
-	// Private init function used by the public constructor that accepts string type, string value
+	/**
+		Private init function used by the public constructor
+
+		@param requestedType The type this variant should be initialized to
+		@param typeText The type we're trying to initialize in textual form
+		@param type The type we're trying to initialize in template form
+		@param value The value the variant should hold
+
+		@return Type T with the correct value, or blank if failed
+	*/
 	template <class T>
 	Variant init(std::string requestedType, std::string typeText, T type, std::string value)
 	{
@@ -35,21 +47,58 @@ private:
 	}
 
 public:
+
+	/**
+		Default constructor. Sets the Bit to blank.
+	*/
 	Bit();
+
+	/**
+		Copy constructor.
+	*/
 	Bit(Variant variant);
-	Bit(const char *text); // Required so that you may initialize Bit from a string literal. The templated version gives a compile error when initializing from a string literal.
+
+	/**
+		Required so that you may initialize Bit from a string literal. The templated version gives a compile error when initializing from a string literal.
+	*/
+	Bit(const char *text);
+
+	/**
+		Used when initializing from a text file or another exterior resource.
+
+		@param type - Can be bool, char, int, float, string or auto
+		@param value - The value this variant will initially hold
+	*/
 	Bit(std::string type, std::string value);
 
+
+	/**
+		Returns the current type of the variant in a textual format ("int", "float", ...)
+	*/
 	std::string type();
 
+	/**
+		Constructor used when initializing from an intrinsic variable. IE: Bit bit = 5;
+	*/
 	template <class T>
 	Bit(T t)
 	{
 		variant = t;
 	}
 
+	/**
+		Allows the Bit class to be streamed
+	*/
 	friend std::ostream& operator<<(std::ostream &out, const Bit& bit);
 
+	/**
+		Conversion to all intrinsic types but string, which has a specialization.
+		If the variant is not a string, then it simply returns the value of the variant, in its current type.
+		I then let a possible implicit conversion occur - This is the desired behavior.
+		If the variant is a string, and (as mentioned before) we're converting to a type that's not a string,
+		then try to lexically cast the string to the requested type. If unsuccessful, will return a default-initialized
+		of the requested type.
+	*/
 	template <class T>
 	operator T() 
 	{
@@ -99,7 +148,10 @@ public:
 		}
 	}
 
-	// Conversion to strings needs specialized behavior
+	/**
+		Specialized casting function, when converting the variant to a string.
+		If the variant is a string, just return it. Otherwise, try to cast it to a string. If unsuccessful, returns an empty string.
+	*/
 	operator std::string()
 	{
 		// If the requested conversion is a string, and the variant is actually a string - Just do it
@@ -127,6 +179,9 @@ public:
 
 std::ostream& operator << (std::ostream &out, const Bit &bit);
 
+/**
+	Syntatic sugar to make this class more usable to programmers of many other languages.
+*/
 typedef Bit var;
 
 #endif
