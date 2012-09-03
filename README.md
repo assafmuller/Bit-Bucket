@@ -76,7 +76,7 @@ In the first case, the cell "nonExistant" will be created and its type will be b
 
 **Requirements:**
 
-Bit Bucket uses Boost as well as several C++11 features. VS2010 compiles Bit Bucket just fine, as well as VS2012, and the latest GCC and Clang.
+Bit Bucket uses Boost as well as several C++11 features. VS2010 compiles Bit Bucket just fine, as well as the Clang version packaged in Xcode 4.4. The code should compile on modern versions of GCC and other comparable compilers.
 
 **Credits and licensing:**
 
