@@ -1,0 +1,14 @@
+/Debug
+/Release
+/ipch
+/BitBucket/Debug
+/BitBucket/Release
+/Doxygen/
+/BitBucket Variant.sdf
+/BitBucket Variant.sln
+/BitBucket Variant.suo
+/readme.docx
+/BitBucket/BitBucket.vcxproj
+/BitBucket/BitBucket.vcxproj.filters
+/BitBucket/BitBucket.vcxproj.user
+/BitBucket/main.cpp

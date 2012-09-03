@@ -94,11 +94,11 @@ static inline void print_stacktrace(FILE *out = stderr, unsigned int max_frames 
 
 void StackPrinter::print()
 {
-#ifdef PLATFORM_WINDOWS
+#if defined PLATFORM_WINDOWS
 	sw.ShowCallstack();
 #endif
 
-#ifdef PLATFORM_LINUX
+#if defined PLATFORM_LINUX
 	print_stacktrace();
 #endif
 }

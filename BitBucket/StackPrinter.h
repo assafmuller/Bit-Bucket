@@ -1,10 +1,10 @@
 #ifndef STACK_PRINTER
 #define STACK_PRINTER
 
-#ifdef _WIN32
+#if defined _WIN32
 #define PLATFORM_WINDOWS
 #else
-	#ifdef linux
+	#if defined _GLIBCXX_HAVE_EXECINFO_H || HAVE_EXECINFO_H // I need to know if the compiler has access to execinfo.h
 		#define PLATFORM_LINUX
 	#endif
 #endif
